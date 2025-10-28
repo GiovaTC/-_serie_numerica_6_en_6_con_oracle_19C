@@ -1,17 +1,67 @@
 package com.telecom;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class SerieSeisEnSeisDB {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+    public static void main(String[] args) {
+        String filePath = "serie_6_en_6.txt";
+
+        int numero = 0;
+        int cantidad = 80;
+
+        try {
+            FileWriter writer = new FileWriter(filePath);
+            Connection conn = conectarOracle();
+
+            if (conn == null) {
+                System.out.println("❌ No se pudo conectar a Oracle");
+                return;
+            }
+
+            PreparedStatement stmt = conn.prepareStatement(
+                    "INSERT INTO SERIE_NUMEROS_19c (VALOR) VALUES (?)"
+            );
+
+            System.out.println("📝 Generando serie y guardando...");
+
+            for (int i = 0; i < cantidad; i++) {
+                writer.write(numero + "\n");
+
+                stmt.setInt(1, numero);
+                stmt.executeUpdate();
+
+                numero += 6;
+            }
+
+            writer.close();
+            stmt.close();
+            conn.close();
+
+            System.out.println("✅ Serie guardada en archivo: " + filePath);
+            System.out.println("✅ Serie insertada en Oracle correctamente");
+
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private static Connection conectarOracle() {
+        try {
+            String url = "jdbc:oracle:thin:@localhost:1521:XE"; // Ajustar según tu BD
+            String user = "TU_USUARIO";
+            String pass = "TU_PASSWORD";
+
+            return DriverManager.getConnection(url, user, pass);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
