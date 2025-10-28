@@ -54,7 +54,7 @@ public class SerieSeisEnSeisDB {
     }
     private static Connection conectarOracle() {
         try {
-            String url = "jdbc:oracle:thin//@localhost:1521/orcl"; // Ajustar según tu BD
+            String url = "jdbc:oracle:thin:@//localhost:1521/orcl";
             String user = "system";
             String pass = "Tapiero123";
 
