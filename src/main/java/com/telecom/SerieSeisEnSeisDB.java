@@ -55,8 +55,8 @@ public class SerieSeisEnSeisDB {
     private static Connection conectarOracle() {
         try {
             String url = "jdbc:oracle:thin//@localhost:1521/orcl"; // Ajustar según tu BD
-            String user = "TU_USUARIO";
-            String pass = "TU_PASSWORD";
+            String user = "system";
+            String pass = "Tapiero123";
 
             return DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
